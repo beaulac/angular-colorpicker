@@ -5,9 +5,12 @@ var minifycss = require('gulp-minify-css');
 var autoprefixer = require('gulp-autoprefixer');
 var rename = require('gulp-rename');
 var connect = require('gulp-connect');
+
 var sassFolder = ['./src/sass/**/*.scss'];
 var jsFolder = ['./src/js/*.js'];
-gulp.task('compass', function() {
+
+
+gulp.task('compass', function () {
     return gulp.src(sassFolder)
         .pipe(compass({
             config_file: './config.rb',
@@ -24,7 +27,8 @@ gulp.task('compass', function() {
         .pipe(minifycss())
         .pipe(gulp.dest('./dist/css/'));
 });
-gulp.task('uglifyjs', function() {
+
+gulp.task('uglifyjs', function () {
     return gulp.src(jsFolder)
         .pipe(gulp.dest('./dist/js/'))
         .pipe(rename({suffix: '.min'}))
@@ -32,7 +36,7 @@ gulp.task('uglifyjs', function() {
         .pipe(gulp.dest('./dist/js/'));
 });
 
-gulp.task('connect', function() {
+gulp.task('connect', function () {
     connect.server({
         root: '../',
         port: 9999,
@@ -40,7 +44,7 @@ gulp.task('connect', function() {
     });
 });
 
-gulp.task('start', function() {
+gulp.task('start', function () {
     gulp.watch(sassFolder, ['compass']);
     gulp.watch(jsFolder, ['uglifyjs']);
     gulp.start('uglifyjs');
