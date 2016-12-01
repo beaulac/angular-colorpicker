@@ -42,32 +42,21 @@ angular.module('ui.colorpicker', [])
             "CANCEL": "Cancelar"
         }
     })
-    .factory('colorpicker.helper', ['$document', function($document) {
+    .factory('colorpicker.helper', ['$cookies', function($cookies) {
         return {
             setCookie: function(name, value) {
-                var days = 30;
                 var exp = new Date();
-                exp.setTime(exp.getTime() + days * 24 * 60 * 60 * 1000);
-                document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+                exp.setDate(exp.getDate() + 30);
+                $cookies.put(name, value, {expires: exp});
             },
             getCookie: function(name) {
-                var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-                if (arr = document.cookie.match(reg)) {
-                    return unescape(arr[2]);
-                } else {
-                    return null;
-                }
+                $cookies.get(name);
             },
             deleteCookie: function(name) {
-                var exp = new Date();
-                exp.setTime(exp.getTime() - 1);
-                var cval = getCookie(name);
-                if (cval != null) {
-                    document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
-                }
+                $cookies.remove(name);
             },
             enabledCookie: function(name) {
-                return "string" == typeof this.getCookie(name) ? true : false;
+                return "string" === typeof this.getCookie(name);
             },
             stringParsers: [{
                 re: /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)/,
@@ -80,7 +69,7 @@ angular.module('ui.colorpicker', [])
                     ];
                 }
             }, {
-                re: /rgba?\(\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)/,
+                re: /rgba?\(\s*(\d+(?:\.\d+)?)%\s*,\s*(\d+(?:\.\d+)?)%\s*,\s*(\d+(?:\.\d+)?)%\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)/,
                 parse: function(execResult) {
                     return [
                         2.55 * execResult[1],
