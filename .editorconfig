@@ -1,0 +1,23 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{js,jsx}]
+indent_brace_style = K&R
+indent_style = space
+indent_size = 4
+spaces_around_operators = true
+spaces_around_brackets = true
+curly_bracket_next_line = false
+
+[*.{css,less,sass,scss}]
+indent_style = space
+indent_size = 4
+
+[*.html]
+indent_style = space
+indent_size = 4
