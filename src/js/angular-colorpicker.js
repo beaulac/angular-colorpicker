@@ -323,7 +323,8 @@ angular.module('ui.colorpicker', [])
         restrict: 'AE',
         replace: true,
         scope: {
-            color: '='
+            color: '=',
+            selectNewCallback: '&onSelectNew'
         },
         template: '<div class="colorpicker-circle">' +
             '    <div class="circle-inner" ng-style="{\'background-color\':color}"></div>' +
@@ -365,7 +366,7 @@ angular.module('ui.colorpicker', [])
             ];
             $scope.historyColorboxs = [];
             var languageWords = $language[attrs.colorLanguage || "zh-cn"];
-            var thisFormat = (attrs.colorType || "hex");
+            var thisFormat = $scope.format = (attrs.colorType || "hex");
             var cookieName = 'historyColor-' + thisFormat;
             var target = angular.element(document.body);
             /*
@@ -396,7 +397,7 @@ angular.module('ui.colorpicker', [])
                 '     <div class="tab-slider" ng-show="colorTab ===2">' +
                 '       <div class="colorpicker-saturation"><i></i></div>' +
                 '       <div class="colorpicker-hue"><i></i></div>' +
-                '       <div class="colorpicker-alpha"><i></i></div>' +
+                '       <div ng-show="format === \'rgba\'" class="colorpicker-alpha"><i></i></div>' +
                 '     </div>' +
                 '     <div class="tab-historyColorbox" ng-show="colorTab ===3">' +
                 '       <div ng-repeat="item in historyColorboxs">' +
@@ -442,6 +443,10 @@ angular.module('ui.colorpicker', [])
                 hideColorpickerTemplate("cancel");
             };
             $scope.select = function() {
+                if ($scope.selectNewCallback && $scope.color !== lastColor) {
+                    $scope.selectNewCallback();
+                }
+
                 hideColorpickerTemplate();
             };
             var bindMouseEvents = function() {
